@@ -34,7 +34,7 @@ var post2 = {
 	date: new Date().toString(),
 	description: "My duck",
 	body: "My duck is the best duck. You have never seen such a good duck. A big yellow duck",
-	image: "trump.jpg"
+	image: "duck01.jpg"
 }
 var posts = gun.get('posts')
 posts.set(post1)
