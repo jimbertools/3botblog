@@ -1,12 +1,10 @@
-# Prismic Vue.js Example Blog
-
-> [Vue.js](https://vuejs.org) example blog project with content managed in [Prismic](https://prismic.io)
-
-## Check out our article for a step by step guide to getting this project up and running
-
-> [Prismic project guide](https://intercom.help/prismicio/examples/vue-js-samples/sample-blog-with-api-based-cms-in-vuejs)
+# 3botblog
 
 ## How to launch this project in your local environment
+
+Run a gunDB of your choice  
+conection strings are currently multiple times in the code  
+Look for `Gun("ws://localhost:8000/gun")`
 
 Run the following commands:
 
@@ -15,7 +13,40 @@ npm install
 npm run serve
 ```
 
-Then you can access it at [http://localhost:8080](http://localhost:8080).
+Then you can access it at [http://localhost:8080](http://localhost:8080).  
+
+Deleting posts is not working!
+
+Dummy data, just paste in console of browser
+```javascript
+var gun = Gun()
+var post1 = {
+	id: 1,
+	title: "Look at my cat",
+	date: new Date().toString(),
+	description: "My cat",
+	body: "My cat is the best cat. You have never seen such a good cat",
+	image: "cat01.jpg"
+}
+var post2 = {
+	id: 2,
+	title: "Look at my duck",
+	date: new Date().toString(),
+	description: "My duck",
+	body: "My duck is the best duck. You have never seen such a good duck. A big yellow duck",
+	image: "trump.jpg"
+}
+var posts = gun.get('posts')
+posts.set(post1)
+posts.set(post2)
+
+gun.get("headline").put({
+	image: "tf.jpg",
+	title: "Welcome to my blog",
+	description: "This blog is running on 3Bot :D"
+})
+
+```
 
 
 ## Project setup
@@ -32,6 +63,13 @@ npm run serve
 ``` bash
 npm run build
 ```
+
+
+#Template used to create blog
+
+# Prismic Vue.js Example Blog
+
+> [Vue.js](https://vuejs.org) example blog project with content managed in [Prismic](https://prismic.io)
 
 ## Learn more about using Prismic with Vue.js
 
