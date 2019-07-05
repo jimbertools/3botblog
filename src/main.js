@@ -1,0 +1,25 @@
+import Vue from 'vue'
+import './plugins/vuetify'
+import PrismicVue from 'prismic-vue'
+import linkResolver from './prismic/link-resolver'
+import htmlSerializer from './prismic/html-serializer'
+import App from './App.vue'
+import router from './router'
+import Vuetify from 'vuetify'
+// index.js or main.js
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+
+Vue.use(Vuetify)
+
+Vue.config.productionTip = false
+
+Vue.use(PrismicVue, {
+  endpoint: window.prismic.endpoint,
+  linkResolver,
+  htmlSerializer
+})
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
