@@ -24,13 +24,9 @@
     <p>Please add some content to your blog home document.</p>
   </div>
 </template>
-
-    <script src="https://cdn.jsdelivr.net/npm/gun/examples/jquery.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <script>
 import BlogPosts from "../components/BlogPosts.vue";
 
-import Gun from "gun";
 
 export default {
   name: "blog-home",
@@ -46,7 +42,6 @@ export default {
       posts: [],
       linkResolver: this.$prismic.linkResolver,
       hasContent: false,
-      gun: Gun("ws://localhost:8000/gun")
     };
   },
   methods: {
@@ -54,11 +49,13 @@ export default {
       this.hasContent = true;
       //Query to get home content
       console.log("getContent");
-      var ken = this.gun.get("headline").on(headline => {
-        console.log(headline);
-        this.headLineImage = headline.image;
+      window.gun.get("headline").on(headline => {
+        // this.headLineImage = headline.image;
         this.headLineTitle = headline.title;
         this.headLineDescription = headline.description;
+
+        console.log(this.headLineTitle, this.headLineDescription, "changed???");
+
       });
     },
     //Function to check for any content on the blog home page
@@ -79,9 +76,7 @@ export default {
       console.log("change:", e.target.className.split('-')[1])
       var toChange = e.target.className.split('-')[1]
       console.log(toChange)
-      this.gun.get("headline").put({
-        [toChange]: data
-      });
+      window.gun.get("headline").get(toChange).put(data)
 
       e.preventDefault();
       e.stopPropagation();

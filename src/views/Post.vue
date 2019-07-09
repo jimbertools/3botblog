@@ -9,9 +9,11 @@
 
       <h1 class="blog-title">{{ fields.title }}</h1>
       <!-- <p class="blog-post-meta"><span class="created-at">{{ Intl.DateTimeFormat('en-US', dateOptions).format(new Date(fields.date)) }}</span></p> -->
-      <!-- <p class="blog-post-meta">
+      <!--
+        <p class="blog-post-meta">
         <span class="created-at">{{ Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(fields.date)) }}</span>
-      </p>-->
+      </p>
+      -->
       <!-- <p class="blog-post-meta">{{ fields.description }} - {{fields.date}}</p> -->
       <p class="blog-post">{{ fields.body }}</p>
 
@@ -26,7 +28,6 @@
 //Importing all the slices components
 import SlicesBlock from "../components/SlicesBlock.vue";
 
-import Gun from "gun";
 export default {
   name: "post",
   components: {
@@ -43,33 +44,33 @@ export default {
         description: null
       },
       gunId: null,
-      slices: [],
-      gun: Gun("ws://localhost:8000/gun")
+      slices: []
     };
   },
   methods: {
     deletePost() {
       // console.log("deleting", this.$route.params.uid)
-      this.gun.get("posts").get(this.gunId).put(null)
+      window.gun
+        .get("posts")
+        .get(this.gunId)
+        .put(null);
       // this.$router.push({path: 'blog-home'})
-      window.location = "/blog"
-      // window.location = 
+      window.location = "/blog";
+      // window.location =
     },
     getContent(id) {
       //Query to get post content
-      this.gun
+      window.gun
         .get("posts")
         .map()
         .once(post => {
           console.log(id, post);
-          if (id == post.id) {
-            this.gunId =  post._["#"];
+          if (post != null && id == post.id) {
+            this.gunId = post._["#"];
             this.fields.title = post.title;
             this.fields.date = post.date;
             this.fields.description = post.description;
             this.fields.body = post.body;
-          } else {
-            console.log("eeuh");
           }
         });
       // this.$prismic.client.getByUID('post', uid)

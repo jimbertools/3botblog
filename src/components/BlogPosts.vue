@@ -13,8 +13,8 @@
         </div>
       </a>
     </div>
-       <h2 id="newTitle" class="blog-post-title-new" contenteditable>{{newPost.title }}</h2>
-        <p id="newBody" class="blog-post-body-new" contenteditable>{{newPost.body }}</p>
+    <h2 id="newTitle" class="blog-post-title-new" contenteditable>{{newPost.title }}</h2>
+    <p id="newBody" class="blog-post-body-new" contenteditable>{{newPost.body }}</p>
 
     <v-container>
       <v-flex>
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import Gun from "gun";
 export default {
   name: "blog-posts",
   data() {
@@ -53,7 +52,6 @@ export default {
         title: "Title",
         body: "Body"
       },
-      gun: Gun("ws://localhost:8000/gun")
     };
   },
   methods: {
@@ -61,12 +59,19 @@ export default {
       console.log(id);
     },
     getPosts() {
-      this.gun
+      console.log("gettings posts")
+      window.gun
         .get("posts")
         .map()
-        .once(post => {
-          console.log(post.id, post.title, post.description);
-          this.posts.push(post);
+        .on(post => {
+          console.log(post)
+          window.gun.get(post).on(post => console.log(post, "wooooooooo"))
+          if (post != null) {
+            console.log(post.id, post.title, post.description);
+            this.posts.push(post);
+          } else {
+            console.log("found an orphant");
+          }
         });
     },
     //Function to get the first paragraph of text in a blog post and limit the displayed text at 300 characters
@@ -104,8 +109,8 @@ export default {
       var body = document.getElementById("newBody").innerText;
       this.newPost.title = title;
       this.newPost.body = body;
-      this.newPost.id = this.posts.length;
-      this.gun.get("posts").set(this.newPost);
+      this.newPost.id = this.posts[this.posts.length -1].id +1;
+      window.gun.get("posts").set(this.newPost);
     },
     showMoreOptions() {
       // var title = document.getElementById("newTitle").innerText;

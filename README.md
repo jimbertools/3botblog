@@ -19,7 +19,7 @@ Deleting posts is not working!
 
 Dummy data, just paste in console of browser
 ```javascript
-var gun = Gun()
+var gun = Gun() // Or Gun("ws://ip:port")
 var post1 = {
 	id: 1,
 	title: "Look at my cat",
