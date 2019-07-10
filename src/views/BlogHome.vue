@@ -3,10 +3,11 @@
   <div v-if="hasContent" class="page">
     <div class="home">
       <!-- Button to edit document in dashboard -->
-      <prismic-edit-button :documentId="documentId" />
+      <!-- <prismic-edit-button :documentId="documentId" /> -->
       <div class="blog-avatar" :style="{ backgroundImage: 'url(/' + headLineImage + ')' }"></div>
-      <h1 class="blog-title" @keyup.enter="editBlog" contenteditable>{{ headLineTitle }}</h1>
-      <p class="blog-description" @keyup.enter="editBlog" contenteditable>{{ headLineDescription }}</p>
+      <input class="blog-title" @keyup.enter="editBlog" v-model="headLineTitle">
+      <br>
+      <textarea class="blog-description" @keyup.enter="editBlog" v-model="headLineDescription"></textarea>
 
       <!-- <div class="blog-avatar" :style="{ backgroundImage: 'url(' + fields.image + ')' }"></div> -->
       <!-- Template for page title -->
@@ -14,7 +15,7 @@
       <!-- Template for page description -->
       <!-- <p class="blog-description">{{ $prismic.richTextAsPlain(fields.description) }}</p> -->
 
-      <div></div>
+      <!-- <div></div> -->
     </div>
     <!-- Vue reference for blog posts component -->
     <blog-posts />
@@ -40,7 +41,6 @@ export default {
       headLineTitle: "Placeholder title",
       headLineDescription: "Placeholder description",
       posts: [],
-      linkResolver: this.$prismic.linkResolver,
       hasContent: false,
     };
   },
@@ -48,13 +48,11 @@ export default {
     getContent() {
       this.hasContent = true;
       //Query to get home content
-      console.log("getContent");
       window.gun.get("headline").on(headline => {
         // this.headLineImage = headline.image;
         this.headLineTitle = headline.title;
         this.headLineDescription = headline.description;
 
-        console.log(this.headLineTitle, this.headLineDescription, "changed???");
 
       });
     },
@@ -69,15 +67,15 @@ export default {
       }
     },
     editBlog(e) {
-      console.log(e);
+      if(e.shiftKey) return;
+      console.log(e)
       e.target.blur();
-      var data = e.target.innerText.replace(/^\s+|\s+$/g, '');
+      var data = e.target.value.replace(/^\s+|\s+$/g, '');
       e.target.innerText = data;
-      console.log("change:", e.target.className.split('-')[1])
       var toChange = e.target.className.split('-')[1]
       console.log(toChange)
-      window.gun.get("headline").get(toChange).put(data)
 
+      window.gun.get("headline").get(toChange).put(data)
       e.preventDefault();
       e.stopPropagation();
     }
@@ -90,10 +88,15 @@ export default {
 </script>
 
 <style scoped>
-.home {
+.home, .blog-title, .blog-description {
   max-width: 700px;
   margin: auto;
   text-align: center;
+  width: 100%;
+}
+.blog-title {
+
+  font-size: 36px;
 }
 .home .blog-avatar {
   height: 140px;
@@ -111,7 +114,11 @@ export default {
   padding-bottom: 3rem;
   font-family: "Lato", sans-serif;
   border-bottom: 1px solid #dadada;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
+
 /* Media Queries */
 @media (max-width: 767px) {
   .home {

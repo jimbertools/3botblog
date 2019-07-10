@@ -63,7 +63,7 @@ export default {
       window.gun
         .get("posts")
         .map()
-        .once(post => {
+        .on(post => {
           console.log(id, post);
           if (post != null && id == post.id) {
             this.gunId = post._["#"];
@@ -73,21 +73,6 @@ export default {
             this.fields.body = post.body;
           }
         });
-      // this.$prismic.client.getByUID('post', uid)
-      //   .then((document) => {
-      //     if (document) {
-      //       this.documentId = document.id
-      //       this.fields.title = document.data.title
-      //       this.fields.date = document.data.date
-
-      //       //Set slices as variable
-      //       this.slices = document.data.body
-      //     }
-      //     else {
-      //       //returns error page
-      //       this.$router.push({ name: 'not-found' })
-      //     }
-      //   })
     }
   },
   created() {
@@ -96,7 +81,6 @@ export default {
   },
   beforeRouteUpdate(to, from, next) {
     this.getContent(to.params.uid);
-    // next()
   }
 };
 </script>

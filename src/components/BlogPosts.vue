@@ -13,13 +13,14 @@
         </div>
       </a>
     </div>
-    <h2 id="newTitle" class="blog-post-title-new" contenteditable>{{newPost.title }}</h2>
-    <p id="newBody" class="blog-post-body-new" contenteditable>{{newPost.body }}</p>
+    <input id="newTitle" class="blog-post-title-new" placeholder="Title" v-model="newPost.title" />
+    <br />
+    <textarea id="newBody" class="blog-post-body-new" placeholder="Body" v-model="newPost.body" />
 
     <v-container>
       <v-flex>
         <v-btn v-on:click="savePost" class="text-xs-right" depressed>Save post</v-btn>
-        <v-btn v-on:click="showMoreOptions" class="text-xs-right" depressed>More options</v-btn>
+        <!-- <v-btn v-on:click="showMoreOptions" class="text-xs-right" depressed>More options</v-btn> -->
       </v-flex>
     </v-container>
   </div>
@@ -28,12 +29,19 @@
     <v-container>
       <v-flex>
         <p>No Posts published at this time.</p>
-        <h2 id="newTitle" class="blog-post-title-new" contenteditable>{{newPost.title }}</h2>
-        <p id="newBody" class="blog-post-body-new" contenteditable>{{newPost.body }}</p>
+        <input
+          id="newTitle"
+          class="blog-post-title-new"
+          placeholder="Title"
+          v-model="newPost.title"
+        />
+        <br />
+        <textarea id="newBody" class="blog-post-body-new" placeholder="Body" v-model="newPost.body" />
       </v-flex>
       <v-flex>
         <v-btn v-on:click="savePost" class="text-xs-right" depressed>Save post</v-btn>
-        <v-btn v-on:click="showMoreOptions" class="text-xs-right" depressed>More options</v-btn>
+        <br />
+        <!-- <v-btn v-on:click="showMoreOptions" class="text-xs-right" depressed>More options</v-btn> -->
       </v-flex>
     </v-container>
   </div>
@@ -49,28 +57,19 @@ export default {
       // linkResolver: this.$prismic.linkResolver,
       newPost: {
         id: null,
-        title: "Title",
-        body: "Body"
-      },
+        title: null,
+        body: null
+      }
     };
   },
   methods: {
-    goToPost(id) {
-      console.log(id);
-    },
     getPosts() {
-      console.log("gettings posts")
       window.gun
         .get("posts")
         .map()
         .on(post => {
-          console.log(post)
-          window.gun.get(post).on(post => console.log(post, "wooooooooo"))
           if (post != null) {
-            console.log(post.id, post.title, post.description);
             this.posts.push(post);
-          } else {
-            console.log("found an orphant");
           }
         });
     },
@@ -105,11 +104,16 @@ export default {
       }
     },
     savePost() {
-      var title = document.getElementById("newTitle").innerText;
-      var body = document.getElementById("newBody").innerText;
+      var title = document.getElementById("newTitle").value;
+      var body = document.getElementById("newBody").value;
       this.newPost.title = title;
       this.newPost.body = body;
-      this.newPost.id = this.posts[this.posts.length -1].id +1;
+
+      if (this.posts[this.posts.length - 1] != null) {
+        this.newPost.id = this.posts[this.posts.length - 1].id + 1;
+      } else {
+        this.newPost.id = 0;
+      }
       window.gun.get("posts").set(this.newPost);
     },
     showMoreOptions() {
@@ -156,6 +160,7 @@ export default {
 .blog-post-title-new {
   color: rgb(85, 85, 85);
   opacity: 0.5;
+  font-size: 28px;
 }
 
 .blog-post-body-new {
