@@ -16,7 +16,7 @@ npm run serve
 Then you can access it at [http://localhost:8080](http://localhost:8080).  
 
 Deleting posts is not working!
-
+ ### Please use (some) dummy data!
 Dummy data, just paste in console of browser
 ```javascript
 var gun = Gun() // Or Gun("ws://ip:port")
