@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "gun": "^0.2019.627",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.7",
     "vuetify": "^1.5.5"
